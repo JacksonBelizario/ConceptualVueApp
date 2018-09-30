@@ -1,0 +1,186 @@
+/* latin */
+
+@font-face {
+    font-family: "Abel";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Abel Regular"), local("Abel-Regular"), url(https://fonts.gstatic.com/s/abel/v8/MwQ5bhbm2POE2V9BPQ.woff2) format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+#app,
+body,
+html {
+    height: 100%;
+    width: 100%;
+    font-family: "Abel", sans-serif !important;
+    color: #23282c;
+}
+
+body,
+html {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+img {
+    vertical-align: unset !important;
+}
+
+.main .main-layout-con {
+    height: 100%;
+    overflow: hidden;
+}
+
+.ivu-layout {
+    -ms-flex: auto;
+    -ms-flex-direction: column;
+    -webkit-box-direction: normal;
+    -webkit-box-flex: 1;
+    -webkit-box-orient: vertical;
+    background: #f5f7f9;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+}
+
+.side-menu-wrapper {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background: #fff;
+    overflow: hidden;
+}
+
+.side-menu-wrapper .ivu-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+}
+
+.main .header-con {
+    background: #fff;
+    padding: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #eceeef;
+}
+
+.sider-trigger-a {
+    color: #5c6b77 !important;
+    font-size: unset;
+}
+
+.header-bar {
+    background: #fff;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+
+.header-bar .custom-content-con {
+    float: right;
+    height: auto;
+    line-height: 64px;
+    padding-right: 20px;
+    margin: 4px 20px;
+    font-size: 30px;
+    display: flex;
+}
+
+.header-bar .ivu-menu-horizontal .ivu-menu-item {
+    padding: 0 10px;
+}
+
+.custom-content-con .ivu-icon {
+    font-size: 25px;
+}
+
+.menu-icon {
+    transition: all 0.3s;
+}
+
+.rotate-icon {
+    transform: rotate(-90deg);
+}
+
+.menu-item span {
+    display: inline-block;
+    overflow: hidden;
+    width: 69px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    transition: width 0.2s ease 0.2s;
+}
+
+.menu-item i {
+    transform: translateX(0px);
+    transition: font-size 0.2s ease, transform 0.2s ease;
+    vertical-align: middle;
+    font-size: 16px;
+}
+
+.collapsed-menu span {
+    width: 0px;
+    transition: width 0.2s ease;
+}
+
+.collapsed-menu i {
+    transform: translateX(5px);
+    transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
+    vertical-align: middle;
+    font-size: 22px;
+}
+
+.layout-logo {
+    width: 155px;
+    height: 30px;
+    border-radius: 3px;
+    float: left;
+    margin: 17px 20px;
+    font-size: 30px;
+    display: flex;
+    transition: all 0.2s ease-in-out;
+}
+
+.layout-logo span {
+    display: inline-block;
+    line-height: 1;
+    margin-left: 20px;
+}
+
+.layout-logo .ivu-icon {
+    margin-left: 6px;
+}
+
+.ivu-menu-item:not(.ivu-menu-item-selected) {
+    color: #515a6e;
+}
+
+.main .main-content-con {
+    height: calc(100% - 60px);
+    overflow: hidden;
+}
+
+.main .content-wrapper {
+    height: calc(100% - 80px);
+    overflow: auto;
+    padding: 18px;
+}
+
+.card-title {
+    margin-bottom: 20px;
+}
+
+label.ivu-form-item-label {
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.ivu-select-dropdown-list {
+    margin-bottom: 0;
+}
