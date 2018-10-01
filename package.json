@@ -15,8 +15,10 @@
     "axios": "^0.18.0",
     "bootstrap-nucleus": "^1.4.2",
     "iview": "^3.1.0",
+    "string-mask": "^0.3.0",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.1",

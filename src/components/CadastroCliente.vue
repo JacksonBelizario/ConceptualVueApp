@@ -5,27 +5,27 @@
                     <h1>Cadastro de Cliente</h1>
                 </Col>
             </Row>
-            <Form ref="dadosPessoa" :model="dadosPessoa" label-position="top">
+            <Form ref="dadosPessoa" :model="dadosPessoa" label-position="top" :rules="ruleValidate">
                 <Row :gutter="16">
                     <Col :xs="12" :md="8">
-                        <FormItem label="Nome">
+                        <FormItem label="Nome" prop="nome">
                             <Input v-model="dadosPessoa.nome" placeholder="Nome" />
                         </FormItem>
                     </Col>
                     <Col :xs="12" :md="8">
-                        <FormItem label="RG">
-                            <Input v-model="dadosPessoa.rg" placeholder="Nome" />
+                        <FormItem label="RG" prop="rg">
+                            <Input v-model="dadosPessoa.rg" />
                         </FormItem>
                     </Col>
                     <Col :xs="12" :md="8">
-                        <FormItem label="CPF">
-                            <Input v-model="dadosPessoa.cpf" placeholder="Nome" />
+                        <FormItem label="CPF" prop="cpf">
+                            <the-mask class="ivu-input ivu-input-default" v-model="dadosPessoa.cpf" :mask="['###.###.###-##']" />
                         </FormItem>
                     </Col>
                 </Row>
                 <Row :gutter="16">
                     <Col :xs="12" :md="8">
-                        <FormItem label="E-mail">
+                        <FormItem label="E-mail" prop="email">
                             <Input v-model="dadosPessoa.email" placeholder="E-mail" />
                         </FormItem>
                     </Col>
@@ -40,7 +40,7 @@
                     </Col>
                     <Col :xs="12" :md="8">
                         <FormItem label="Data de Nascimento">
-                            <DatePicker type="date" placeholder="00/00/0000" v-model="dadosPessoa.dataDeNascimento"></DatePicker>
+                            <DatePicker type="date" placeholder="00/00/0000" format="dd/MM/yyyy" v-model="dadosPessoa.dataDeNascimento"></DatePicker>
                         </FormItem>
                     </Col>
                 </Row>
@@ -78,19 +78,72 @@
                             <FormItem
                                 label="Telefone"
                                 :prop="`telefones[${index}].numero`"
-                                :rules="{required: true, message: 'Item ' + item.index +' can not be empty', trigger: 'blur'}">
-                                <Input v-model="item.numero">
-                                    <Select v-model="item.tipoDeTelefone" slot="prepend" style="width: 80px">
-                                        <Option value="1">Fixo</Option>
-                                        <Option value="2">Celular</Option>
-                                    </Select>
-                                </Input>
+                                :rules="{required: true, message: 'Informe o número de telefone', trigger: 'blur'}">
+                                <div class="ivu-input-wrapper ivu-input-wrapper-default ivu-input-type ivu-input-group ivu-input-group-default ivu-input-group-with-prepend">
+                                    <div class="ivu-input-group-prepend" style="">
+                                        <Select v-model="item.tipoDeTelefone" style="width: 80px">
+                                            <Option value="1">Fixo</Option>
+                                            <Option value="2">Celular</Option>
+                                        </Select>
+                                    </div>
+                                    <the-mask class="ivu-input ivu-input-default" v-model="item.numero" :mask="['(##) ####-####', '(##) #####-####']" masked="true" />
+                                </div>
                             </FormItem>
                         </Card>
                     </Col>
                     <Col :xs="12" :md="8" :lg="6">
                         <FormItem>
                             <Button type="dashed" long @click="adicionarTelefone" icon="md-add" :style="{height: '133px', fontSize: '22px'}">Adicionar telefone</Button>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <h2>Endereços</h2>
+                <Row :gutter="16">
+                    <Col :xs="24"
+                        v-for="(item, index) in dadosPessoa.enderecos"
+                        v-if="item.status"
+                        :key="index">
+                        <Card dis-hover style="padding-top:20px">
+                            <a href="#" slot="extra" @click.prevent="removerEndereco(index)">
+                                <Icon size="30" type="ios-close" />
+                            </a>
+                            <Row :gutter="16">
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="Rua" :prop="`enderecos[${index}].logradouro`">
+                                        <Input v-model="item.logradouro" placeholder="logradouro" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="Número" :prop="`enderecos[${index}].numero`">
+                                        <Input v-model="item.numero" placeholder="numero" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="Bairro" :prop="`enderecos[${index}].bairro`">
+                                        <Input v-model="item.bairro" placeholder="Bairro" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="Complemento" :prop="`enderecos[${index}].complemento`">
+                                        <Input v-model="item.complemento" placeholder="complemento" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="CEP" :prop="`enderecos[${index}].cep`">
+                                        <the-mask class="ivu-input ivu-input-default" v-model="item.cep" :mask="['#####-###']" masked="true" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
+                                    <FormItem label="tipoDeEndereco" :prop="`enderecos[${index}].tipoDeEndereco`">
+                                        <Input v-model="item.tipoDeEndereco" placeholder="tipoDeEndereco" />
+                                    </FormItem>
+                                </Col>
+                            </Row>
+                        </Card>
+                    </Col>
+                    <Col :xs="24">
+                        <FormItem>
+                            <Button type="dashed" long @click="adicionarEndereco" icon="md-add" :style="{height: '50px', fontSize: '22px'}">Adicionar endereço</Button>
                         </FormItem>
                     </Col>
                 </Row>
@@ -104,35 +157,71 @@
 </template>
 <script>
 const axios = require("axios");
+const { tratarErros, validadorCPF } = require("../utils.js");
+const StringMask = require("string-mask");
+
+import { TheMask } from "vue-the-mask";
 export default {
+  components: { TheMask },
   data() {
     return {
       dadosPessoa: {
-        nome: "Jackson Luiz",
-        cpf: "046.575;171-71",
-        rg: "12345678-8",
-        email: "jackson@hotmail.com",
-        dataDeNascimento: "1990-02-11",
-        naturalidade: "Dourados",
-        profissao: "Desenvolvedor",
-        genero: "2",
-        estadoCivil: "1",
-        pessoaFisicaTipo: "1",
-        telefones: [
-          { numero: "(67) 5555-7777", tipoDeTelefone: "3", status: 1 },
-          { numero: "(67) 8888-3333", tipoDeTelefone: "1", status: 1 },
-          { numero: "(67) 9966-0066", tipoDeTelefone: "2", status: 1 }
-        ],
+        nome: "",
+        cpf: "",
+        rg: "",
+        email: "",
+        dataDeNascimento: "",
+        naturalidade: "",
+        profissao: "",
+        genero: "",
+        estadoCivil: "",
+        pessoaFisicaTipo: "",
+        telefones: [{ numero: "", tipoDeTelefone: "", status: 1 }],
         enderecos: [
           {
-            bairro: "Rua Marcelino Pire",
-            logradouro: "Centro",
+            logradouro: "Rua Marcelino Pire",
+            bairro: "Centro",
             numero: "1521",
             complemento: "S/C",
             cep: "79822-310",
             tipoDeEndereco: 1,
-            cidade: 1518
+            cidade: 1518,
+            status: 1
           }
+        ]
+      },
+      ruleValidate: {
+        nome: [
+          { required: true, message: "Informe um nome", trigger: "blur" },
+          {
+            type: "string",
+            min: 3,
+            max: 255,
+            message: "O nome deve conter entre 3 e 255 caracters",
+            trigger: "blur"
+          }
+        ],
+        rg: [
+          { required: true, message: "Informe o RG", trigger: "blur" },
+          {
+            type: "string",
+            min: 5,
+            max: 30,
+            message: "O RG deve conter entre 5 e 30 caracters",
+            trigger: "blur"
+          }
+        ],
+        cpf: [
+          { required: true, message: "Informe o CPF", trigger: "blur" },
+          {
+            validator: validadorCPF,
+            trigger: "blur",
+            message: "Informe um CPF válido"
+          }
+        ],
+        email: [
+          //{ required: true, message: 'Informe o email do cliente', trigger: 'blur' },
+          { type: "email", message: "Informe um email válido", trigger: "blur" }
         ]
       }
     };
@@ -141,18 +230,17 @@ export default {
     salvarDados(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          //const dadosPessoa = JSON.parse(JSON.stringify(this.dadosPessoa));
           const BASE_URL = "//35.198.15.248:8080/api/";
           const URI = "clientes/pf/";
           axios
             .post(`${BASE_URL}${URI}`, this.dadosPessoa)
-            .then(response => {
-              console.log(response);
+            .then(({ data }) => {
+              console.log(data);
               this.$Message.success("Success!");
             })
-            .catch(error => {
-              console.error(error);
-              this.$Message.error("Fail! " + error);
+            .catch(({ response }) => {
+              const { data } = response;
+              tratarErros(this, data);
             });
         } else {
           this.$Message.error("Fail!");
@@ -171,6 +259,21 @@ export default {
     },
     removerTelefone(index) {
       this.dadosPessoa.telefones[index].status = 0;
+    },
+    adicionarEndereco() {
+      this.dadosPessoa.enderecos.push({
+        logradouro: "",
+        bairro: "",
+        numero: "",
+        complemento: "",
+        cep: "",
+        tipoDeEndereco: 1,
+        cidade: "",
+        status: 1
+      });
+    },
+    removerEndereco(index) {
+      this.dadosPessoa.enderecos[index].status = 0;
     }
   }
 };

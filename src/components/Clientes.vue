@@ -19,8 +19,13 @@ export default {
       clientes: {
         colunas: [
           {
-            title: "Name",
-            key: "name",
+            title: "#",
+            key: "id",
+            maxWidth: 50
+          },
+          {
+            title: "Nome",
+            key: "nome",
             render: (h, params) => {
               return h("div", [
                 h("Icon", {
@@ -28,20 +33,16 @@ export default {
                     type: "person"
                   }
                 }),
-                h("strong", params.row.name)
+                h("strong", params.row.nome)
               ]);
             }
           },
           {
-            title: "Age",
-            key: "age"
+            title: "CPF",
+            key: "cpf"
           },
           {
-            title: "Address",
-            key: "address"
-          },
-          {
-            title: "Action",
+            title: " ",
             key: "action",
             width: 150,
             align: "center",
@@ -63,7 +64,7 @@ export default {
                       }
                     }
                   },
-                  "View"
+                  "Ver"
                 ),
                 h(
                   "Button",
@@ -78,34 +79,13 @@ export default {
                       }
                     }
                   },
-                  "Delete"
+                  "Apagar"
                 )
               ]);
             }
           }
         ],
-        dados: [
-          {
-            name: "John Brown",
-            age: 18,
-            address: "New York No. 1 Lake Park"
-          },
-          {
-            name: "Jim Green",
-            age: 24,
-            address: "London No. 1 Lake Park"
-          },
-          {
-            name: "Joe Black",
-            age: 30,
-            address: "Sydney No. 1 Lake Park"
-          },
-          {
-            name: "Jon Snow",
-            age: 26,
-            address: "Ottawa No. 2 Lake Park"
-          }
-        ]
+        dados: []
       }
     };
   },
@@ -116,8 +96,12 @@ export default {
     async getClientes() {
       const BASE_URL = "//35.198.15.248:8080/api/";
       const URI = "clientes/pf/";
-      const response = await axios.get(`${BASE_URL}${URI}`);
-      console.log(response);
+      axios.get(`${BASE_URL}${URI}`).then(({ data: clientes }) => {
+        console.log(clientes);
+        this.clientes.dados = clientes;
+      }).catch(error => {
+        console.warn(error);
+      });
     }
   }
 };
