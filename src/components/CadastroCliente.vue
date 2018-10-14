@@ -82,11 +82,11 @@
                                 <div class="ivu-input-wrapper ivu-input-wrapper-default ivu-input-type ivu-input-group ivu-input-group-default ivu-input-group-with-prepend">
                                     <div class="ivu-input-group-prepend" style="">
                                         <Select v-model="item.tipoDeTelefone" style="width: 80px">
-                                            <Option value="1">Fixo</Option>
-                                            <Option value="2">Celular</Option>
+                                            <Option :value="1">Fixo</Option>
+                                            <Option :value="2">Celular</Option>
                                         </Select>
                                     </div>
-                                    <the-mask class="ivu-input ivu-input-default" v-model="item.numero" :mask="['(##) ####-####', '(##) #####-####']" masked="true" />
+                                    <the-mask class="ivu-input ivu-input-default" v-model="item.numero" :mask="['(##) ####-####', '(##) #####-####']" :masked="true" />
                                 </div>
                             </FormItem>
                         </Card>
@@ -109,6 +109,12 @@
                             </a>
                             <Row :gutter="16">
                                 <Col :xs="12" :md="8">
+                                    <FormItem label="CEP" :prop="`enderecos[${index}].cep`"
+                                    :rules="{required: true, message: 'Informe o CEP', min: 9, max: 9, trigger: 'blur'}">
+                                        <the-mask class="ivu-input ivu-input-default" v-model="item.cep" :mask="['#####-###']" :masked="true" @input="onCEP(index)" />
+                                    </FormItem>
+                                </Col>
+                                <Col :xs="12" :md="8">
                                     <FormItem label="Rua" :prop="`enderecos[${index}].logradouro`">
                                         <Input v-model="item.logradouro" placeholder="logradouro" />
                                     </FormItem>
@@ -129,13 +135,17 @@
                                     </FormItem>
                                 </Col>
                                 <Col :xs="12" :md="8">
-                                    <FormItem label="CEP" :prop="`enderecos[${index}].cep`">
-                                        <the-mask class="ivu-input ivu-input-default" v-model="item.cep" :mask="['#####-###']" masked="true" />
+                                    <FormItem label="Estado">
+                                        <Select v-model="item.estado" @input="onEstado(index)">
+                                            <Option v-for="estado in estados" :value="estado.id" :key="estado.id">{{estado.sigla}}</Option>
+                                        </Select>
                                     </FormItem>
                                 </Col>
                                 <Col :xs="12" :md="8">
-                                    <FormItem label="tipoDeEndereco" :prop="`enderecos[${index}].tipoDeEndereco`">
-                                        <Input v-model="item.tipoDeEndereco" placeholder="tipoDeEndereco" />
+                                    <FormItem label="Cidade">
+                                        <Select v-model="item.cidade">
+                                            <Option v-for="cidade in cidades" :value="cidade.id" :key="cidade.id">{{cidade.nome}}</Option>
+                                        </Select>
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -157,12 +167,21 @@
 </template>
 <script>
 const axios = require("axios");
-const { tratarErros, validadorCPF } = require("../utils.js");
+const moment = require("moment");
+const {
+  tratarErros,
+  validadorCPF,
+  consultarCEP,
+  getEstados,
+  getCidades,
+  getCidade
+} = require("../utils.js");
 const StringMask = require("string-mask");
 
 import { TheMask } from "vue-the-mask";
 export default {
   components: { TheMask },
+  props: ["id"],
   data() {
     return {
       dadosPessoa: {
@@ -176,16 +195,17 @@ export default {
         genero: "",
         estadoCivil: "",
         pessoaFisicaTipo: "",
-        telefones: [{ numero: "", tipoDeTelefone: "", status: 1 }],
+        telefones: [{ numero: "", tipoDeTelefone: 0, status: 1 }],
         enderecos: [
           {
-            logradouro: "Rua Marcelino Pire",
-            bairro: "Centro",
-            numero: "1521",
-            complemento: "S/C",
-            cep: "79822-310",
-            tipoDeEndereco: 1,
-            cidade: 1518,
+            logradouro: "",
+            bairro: "",
+            numero: "",
+            complemento: "",
+            cep: "",
+            tipoDeEndereco,
+            estado,
+            cidade, //codigo IBGE
             status: 1
           }
         ]
@@ -223,7 +243,9 @@ export default {
           //{ required: true, message: 'Informe o email do cliente', trigger: 'blur' },
           { type: "email", message: "Informe um email válido", trigger: "blur" }
         ]
-      }
+      },
+      estados: [],
+      cidades: []
     };
   },
   methods: {
@@ -231,17 +253,29 @@ export default {
       this.$refs[name].validate(valid => {
         if (valid) {
           const BASE_URL = "//35.198.15.248:8080/api/";
-          const URI = "clientes/pf/";
-          axios
-            .post(`${BASE_URL}${URI}`, this.dadosPessoa)
-            .then(({ data }) => {
-              console.log(data);
-              this.$Message.success("Success!");
-            })
-            .catch(({ response }) => {
-              const { data } = response;
-              tratarErros(this, data);
-            });
+          if (this.dadosPessoa.id) {
+            const URI = `clientes/pf/${this.dadosPessoa.id}`;
+            axios
+              .put(`${BASE_URL}${URI}`, this.dadosPessoa)
+              .then(({ data }) => {
+                this.$Message.success("Success!");
+              })
+              .catch(({ response }) => {
+                const { data } = response;
+                tratarErros(this, data);
+              });
+          } else {
+            const URI = "clientes/pf/";
+            axios
+              .post(`${BASE_URL}${URI}`, this.dadosPessoa)
+              .then(({ data }) => {
+                this.$Message.success("Success!");
+              })
+              .catch(({ response }) => {
+                const { data } = response;
+                tratarErros(this, data);
+              });
+          }
         } else {
           this.$Message.error("Fail!");
         }
@@ -268,12 +302,93 @@ export default {
         complemento: "",
         cep: "",
         tipoDeEndereco: 1,
-        cidade: "",
+        cidade: null, //codigo IBGE
+        estado: null,
+        municipio: null,
         status: 1
       });
     },
     removerEndereco(index) {
       this.dadosPessoa.enderecos[index].status = 0;
+    },
+    async onCEP(index) {
+      const cep = this.dadosPessoa.enderecos[index].cep;
+      const res = await consultarCEP(cep);
+      /**
+       * Caso seja um CEP válido, preenche automaticamente o endereço
+       */
+      if (res) {
+        this.dadosPessoa.enderecos[index].logradouro = res.logradouro;
+        this.dadosPessoa.enderecos[index].bairro = res.bairro;
+        this.dadosPessoa.enderecos[index].complemento = res.complemento;
+        this.dadosPessoa.enderecos[index].cidade = parseInt(res.ibge);
+        /**
+         * A partir do código do IBGE da cidade consultada pelo CEP
+         * Seleciona o estado no Select
+         */
+        const cidade = await getCidade(res.ibge);
+        if (cidade) {
+          const estado = cidade.microrregiao.mesorregiao.UF.id;
+          this.dadosPessoa.enderecos[index].estado = estado;
+          this.onEstado(index);
+        }
+      }
+    },
+    /**
+     * Carrega os Estados do Brasil
+     */
+    async carregarEstados() {
+      const estados = await getEstados();
+      if (estados) {
+        this.estados = estados;
+      }
+    },
+    /**
+     * Carrega as cidades ao selecionar um estado
+     */
+    async onEstado(index) {
+      const estado = this.dadosPessoa.enderecos[index].estado;
+      /**
+       * Consulta de estados a partir do ID do IBGE
+       */
+      const cidades = await getCidades(estado);
+      if (cidades) {
+        this.cidades = cidades;
+      }
+    },
+    async getDadosCliente(id) {
+      const BASE_URL = "//35.198.15.248:8080/api/";
+      const URI = `clientes/pf/${id}`;
+      axios
+        .get(`${BASE_URL}${URI}`)
+        .then(({ data: cliente }) => {
+          cliente.dataDeNascimento = new Date(moment(cliente.dataDeNascimento));
+          cliente.telefones = cliente.telefones.map(telefone => {
+            telefone.tipoDeTelefone = 1;
+            telefone.status = 1;
+            return telefone;
+          });
+          cliente.enderecos = cliente.enderecos.map(endereco => {
+            endereco.status = 1;
+            endereco.estado = endereco.cidade.estado.id;
+            endereco.cidade = endereco.cidade.id;
+            return endereco;
+          });
+          //console.log(JSON.parse(JSON.stringify(cliente)));
+          this.dadosPessoa = cliente;
+          this.dadosPessoa.enderecos.map((el, index) => {
+            this.onEstado(index);
+          });
+        })
+        .catch(error => {
+          console.warn(error);
+        });
+    }
+  },
+  created() {
+    this.carregarEstados();
+    if (this.id) {
+      this.getDadosCliente(this.id);
     }
   }
 };

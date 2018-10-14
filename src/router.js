@@ -29,9 +29,10 @@ export default new VueRouter({
           component: CteNovo
         },
         {
-          path: "/cadastros/cliente",
+          path: "/cadastros/cliente/:id?",
           name: "CadastroCliente",
-          component: CadastroCliente
+          component: CadastroCliente,
+          props: true
         },
         {
           path: "/cadastros/clientes",

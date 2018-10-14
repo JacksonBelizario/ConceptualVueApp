@@ -60,7 +60,9 @@ export default {
                     },
                     on: {
                       click: () => {
-                        this.show(params.index);
+                        this.$router.push({
+                          path: `/cadastros/cliente/${parseInt(params.row.id)}`
+                        });
                       }
                     }
                   },
@@ -96,12 +98,14 @@ export default {
     async getClientes() {
       const BASE_URL = "//35.198.15.248:8080/api/";
       const URI = "clientes/pf/";
-      axios.get(`${BASE_URL}${URI}`).then(({ data: clientes }) => {
-        console.log(clientes);
-        this.clientes.dados = clientes;
-      }).catch(error => {
-        console.warn(error);
-      });
+      axios
+        .get(`${BASE_URL}${URI}`)
+        .then(({ data: clientes }) => {
+          this.clientes.dados = clientes;
+        })
+        .catch(error => {
+          console.warn(error);
+        });
     }
   }
 };

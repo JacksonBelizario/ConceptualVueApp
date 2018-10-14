@@ -1,9 +1,11 @@
 export const tratarErros = (_this, request) => {
   if (request.status == 400) {
-    const erros = request.listaDeErros.map(({ campoDoErro, mensagem }) => {
-      //_this.$refs.formCustom.validateField(campoDoErro);
-      return `<b>${campoDoErro}:</b> ${mensagem}`;
-    });
+    const erros = request.listaDeErros
+      ? request.listaDeErros.map(({ campoDoErro, mensagem }) => {
+          //_this.$refs.formCustom.validateField(campoDoErro);
+          return `<b>${campoDoErro}:</b> ${mensagem}`;
+        })
+      : [request.message];
     _this.$Modal.error({
       title: request.mensagem,
       content: erros.join("<br>")
@@ -81,4 +83,51 @@ export const validadorCNPJ = (rule, value, callback) => {
     } else {
       callback();
     }*/
+};
+
+const axios = require("axios");
+
+export const consultarCEP = async cep => {
+  const cepNum = cep ? cep.match(/\d+/gi).join("") : {};
+  if (cepNum.length != 8) return false;
+  try {
+    const { data } = await axios.get(`//viacep.com.br/ws/${cepNum}/json/`);
+    if (data.erro) return false;
+    return data;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const getEstados = async () => {
+  try {
+    const { data } = await axios.get(
+      `//servicodados.ibge.gov.br/api/v1/localidades/estados/`
+    );
+    return data;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const getCidades = async estado => {
+  try {
+    const { data } = await axios.get(
+      `//servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    );
+    return data;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const getCidade = async cidade => {
+  try {
+    const { data } = await axios.get(
+      `https://servicodados.ibge.gov.br/api/v1/localidades/municipios/${cidade}`
+    );
+    return data;
+  } catch (err) {
+    return false;
+  }
 };
