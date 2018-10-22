@@ -74,16 +74,16 @@ export const validadorCPF = (rule, value, callback) => {
  * @param {*} value
  * @param {*} callback
  */
-export const validadorCNPJ = (rule, value, callback) => {
+/*export const validadorCNPJ = (rule, value, callback) => {
   const regex = "([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})";
   const regexExp = new RegExp(regex);
   //TODO
-  /*if (!value.match(regexExp) && !isCPF(value.match(/\d+/gi).join(""))) {
+  if (!value.match(regexExp) && !isCPF(value.match(/\d+/gi).join(""))) {
       callback(new Error(rule.message));
     } else {
       callback();
-    }*/
-};
+    }
+};*/
 
 const axios = require("axios");
 
@@ -109,13 +109,16 @@ export const getEstados = async () => {
     return false;
   }
 };
-
+const { municipios } = require("./municipios.js");
 export const getCidades = async estado => {
   try {
-    const { data } = await axios.get(
-      `//servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    // const { data } = await axios.get(
+    //   `//servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
+    // );
+    // return data;
+    return municipios.filter(
+      cidade => cidade.microrregiao.mesorregiao.UF.id == estado
     );
-    return data;
   } catch (err) {
     return false;
   }

@@ -27,7 +27,10 @@
                     <MenuItem name="2-1">Cadastro de Clientes</MenuItem>
                 </router-link>
                 <router-link to="/cadastros/clientes">
-                    <MenuItem name="2-2">Lista de Clientes</MenuItem>
+                    <MenuItem name="2-2">Clientes</MenuItem>
+                </router-link>
+                <router-link to="/cadastros/funcionarios">
+                    <MenuItem name="2-2">Funcionários</MenuItem>
                 </router-link>
                 <MenuItem name="2-3">Fornecedores</MenuItem>
             </Submenu>

@@ -203,9 +203,6 @@ export default {
             numero: "",
             complemento: "",
             cep: "",
-            tipoDeEndereco,
-            estado,
-            cidade, //codigo IBGE
             status: 1
           }
         ]
@@ -301,9 +298,6 @@ export default {
         numero: "",
         complemento: "",
         cep: "",
-        tipoDeEndereco: 1,
-        cidade: null, //codigo IBGE
-        estado: null,
         municipio: null,
         status: 1
       });
@@ -326,19 +320,21 @@ export default {
          * A partir do código do IBGE da cidade consultada pelo CEP
          * Seleciona o estado no Select
          */
-        const cidade = await getCidade(res.ibge);
-        if (cidade) {
-          const estado = cidade.microrregiao.mesorregiao.UF.id;
-          this.dadosPessoa.enderecos[index].estado = estado;
-          this.onEstado(index);
-        }
+        // const cidade = await getCidade(res.ibge);
+        // if (cidade) {
+        //   const UF = cidade.microrregiao.mesorregiao.UF.id;
+        //   this.dadosPessoa.enderecos[index].estado = UF;
+        //   this.onEstado(index);
+        // }
       }
     },
     /**
      * Carrega os Estados do Brasil
      */
     async carregarEstados() {
-      const estados = await getEstados();
+      const { estados } = require("../estados.js");
+      //const estados = await getEstados();
+      console.log("estados", estados);
       if (estados) {
         this.estados = estados;
       }
@@ -347,12 +343,13 @@ export default {
      * Carrega as cidades ao selecionar um estado
      */
     async onEstado(index) {
-      const estado = this.dadosPessoa.enderecos[index].estado;
+      const UF = this.dadosPessoa.enderecos[index].estado;
       /**
        * Consulta de estados a partir do ID do IBGE
        */
-      const cidades = await getCidades(estado);
+      const cidades = await getCidades(UF);
       if (cidades) {
+        console.log("cidades", cidades);
         this.cidades = cidades;
       }
     },
@@ -374,7 +371,7 @@ export default {
             endereco.cidade = endereco.cidade.id;
             return endereco;
           });
-          //console.log(JSON.parse(JSON.stringify(cliente)));
+          console.log(JSON.parse(JSON.stringify(cliente)));
           this.dadosPessoa = cliente;
           this.dadosPessoa.enderecos.map((el, index) => {
             this.onEstado(index);
