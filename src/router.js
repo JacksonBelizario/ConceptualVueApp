@@ -1,11 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 //import Home from './containers/Home.vue'
-const Home = () => import("@/containers/Home");
-const CadastroCliente = () => import("@/components/CadastroCliente");
-const Clientes = () => import("@/components/Clientes");
-const TimeLine = () => import("@/components/TimeLine");
-const CteNovo = () => import("@/components/CteNovo");
 
 Vue.use(VueRouter);
 //Vue.component(Home);
@@ -15,31 +10,35 @@ export default new VueRouter({
     {
       path: "/",
       name: "Home",
-      component: Home,
+      component: () => import("@/containers/Home"),
       redirect: "/timeline",
       children: [
         {
           path: "/timeline",
           name: "TimeLine",
-          component: TimeLine
+          component: () => import("@/components/TimeLine")
         },
         {
           path: "/cte/novo",
           name: "CteNovo",
-          component: CteNovo
+          component: () => import("@/components/CteNovo")
         },
         {
           path: "/cadastros/cliente/:id?",
           name: "CadastroCliente",
-          component: CadastroCliente,
+          component: () => import("@/components/CadastroCliente"),
           props: true
         },
         {
           path: "/cadastros/clientes",
           name: "Clientes",
-          component: Clientes
+          component: () => import("@/components/Clientes")
         }
       ]
+    },
+    {
+      path: "/login",
+      component: () => import("@/containers/Login")
     }
   ]
 });

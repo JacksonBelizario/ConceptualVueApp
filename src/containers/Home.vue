@@ -6,16 +6,22 @@
             <span v-if="!isCollapsed">Emissor</span>
         </div>
         <Menu active-name="1-1" theme="light" width="auto" :class="menuitemClasses" @on-open-change="openMenu">
-            <router-link to="/cte/novo">
-                <MenuItem name="1-1">
-                    <Icon type="ios-navigate"></Icon>
-                    <span>Novo Cte</span>
-                </MenuItem>
-            </router-link>
             <router-link to="/">
                 <MenuItem name="1-2">
                     <Icon type="ios-navigate"></Icon>
                     <span>Home</span>
+                </MenuItem>
+            </router-link>
+            <router-link to="/cte/novo">
+                <MenuItem name="1-1">
+                    <Icon type="md-document"></Icon>
+                    <span>Novo Cte</span>
+                </MenuItem>
+            </router-link>
+            <router-link to="/login">
+                <MenuItem name="1-3">
+                    <Icon type="md-finger-print"></Icon>
+                    <span>Login</span>
                 </MenuItem>
             </router-link>
             <Submenu name="2">
