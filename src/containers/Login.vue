@@ -1,5 +1,5 @@
 <style scoped>
-    .layout{
+    .layout {
         border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
@@ -7,12 +7,14 @@
         overflow: hidden;
         height: 100%;
     }
-    .layout .content{
+
+    .layout .content {
         display: flex;
         padding: 50px;
         justify-content: center;
     }
-    .layout .card{
+
+    .layout .card {
         width: 500px;
     }
 </style>
@@ -28,10 +30,10 @@
                     </Row>
                     <Form ref="login" :model="login" label-position="top" :rules="ruleValidate">
                         <FormItem label="E-mail" prop="email">
-                            <Input size="large" v-model="login.email" placeholder="E-mail" />
+                            <Input size="large" v-model="login.email" placeholder="E-mail"/>
                         </FormItem>
                         <FormItem label="Senha" prop="password">
-                            <Input size="large" v-model="login.password" type="password" placeholder="Senha" />
+                            <Input size="large" v-model="login.password" type="password" placeholder="Senha"/>
                         </FormItem>
                         <FormItem prop="rememberme">
                             <Checkbox v-model="login.rememberme" size="large">Lembrar</Checkbox>
@@ -55,11 +57,11 @@
             },
             ruleValidate: {
                 email: [
-                    { required: true, message: "Informe o e-mail", trigger: "blur" },
-                    { type: "email", message: "Informe um email válido", trigger: "blur" }
+                    {required: true, message: "Informe o e-mail", trigger: "blur"},
+                    {type: "email", message: "Informe um email válido", trigger: "blur"}
                 ],
                 password: [
-                    { required: true, message: "Informe a Senha", trigger: "blur" }
+                    {required: true, message: "Informe a Senha", trigger: "blur"}
                 ],
             },
         }),

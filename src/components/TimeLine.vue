@@ -30,16 +30,15 @@
     </div>
 </template>
 <script>
-    export default {
-        
-    }
+    export default {}
 </script>
 <style scoped>
-    .time{
+    .time {
         font-size: 14px;
         font-weight: bold;
     }
-    .content{
+
+    .content {
         padding-left: 5px;
     }
 </style>
