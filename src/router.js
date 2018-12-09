@@ -1,9 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-//import Home from './containers/Home.vue'
 
 Vue.use(VueRouter);
-//Vue.component(Home);
 
 export default new VueRouter({
   routes: [
