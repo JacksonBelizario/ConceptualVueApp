@@ -7,6 +7,7 @@ import "iview/dist/styles/iview.css";
 import locale from "iview/dist/locale/pt-BR";
 import "./assets/css/style.css";
 import "bootstrap-nucleus";
+import _ from "lodash";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faAsterisk, faDollarSign, faShieldAlt, faTruck, faUser} from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +20,7 @@ Vue.use(iView, {locale});
 /*Vue.filter("formatarValor", function(valor) {
   return accounting.formatMoney(valor, "R$ ", 2, ".", ",");
 });*/
+Object.defineProperty(Vue.prototype, '$_', {value: _});
 
 Vue.config.productionTip = false;
 

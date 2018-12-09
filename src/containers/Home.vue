@@ -91,6 +91,7 @@
                 </Layout>
             </Content>
         </Layout>
+        <div style="display: none">{{windowSize}}</div>
     </Layout>
 </template>
 <script>
@@ -106,6 +107,9 @@
             },
             menuitemClasses() {
                 return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+            },
+            windowSize() {
+                return this.$store.getters['windowSize'].width;
             }
         },
         methods: {
@@ -122,12 +126,17 @@
         },
         mounted() {
             this.$nextTick(() => {
-                window.addEventListener('resize', () => {
-                    if (window.innerWidth < 1170 && !this.isCollapsed) {
-                        this.collapsedSider();
-                    }
-                });
+                window.addEventListener('resize', this.$_.debounce(() => {
+                    this.$store.dispatch('changeWindowSize', [window.innerWidth, window.innerHeight]);
+                }, 500));
             })
         },
+        watch: {
+            windowSize(oldWidth, width) {
+                if (width < 1170 && !this.isCollapsed) {
+                    this.collapsedSider();
+                }
+            }
+        }
     };
 </script>

@@ -96,7 +96,8 @@
                 </Col>
                 <Col :lg="6" :md="8" :xs="12">
                     <FormItem>
-                        <Button :style="{height: '133px', fontSize: '22px'}" @click="adicionarTelefone" icon="md-add" long
+                        <Button :style="{height: '133px', fontSize: '22px'}" @click="adicionarTelefone" icon="md-add"
+                                long
                                 type="dashed">Adicionar telefone
                         </Button>
                     </FormItem>
@@ -114,10 +115,12 @@
                         </a>
                         <Row :gutter="16">
                             <Col :md="8" :xs="12">
-                                <FormItem :prop="`enderecos[${index}].cep`" :rules="{required: true, message: 'Informe o CEP', min: 9, max: 9, trigger: 'blur'}"
+                                <FormItem :prop="`enderecos[${index}].cep`"
+                                          :rules="{required: true, message: 'Informe o CEP', min: 9, max: 9, trigger: 'blur'}"
                                           label="CEP">
                                     <the-mask :mask="['#####-###']" :masked="true"
-                                              @input="onCEP(index)" class="ivu-input ivu-input-default" v-model="item.cep"/>
+                                              @input="onCEP(index)" class="ivu-input ivu-input-default"
+                                              v-model="item.cep"/>
                                 </FormItem>
                             </Col>
                             <Col :md="8" :xs="12">
@@ -163,7 +166,8 @@
                 </Col>
                 <Col :xs="24">
                     <FormItem>
-                        <Button :style="{height: '50px', fontSize: '22px'}" @click="adicionarEndereco" icon="md-add" long
+                        <Button :style="{height: '50px', fontSize: '22px'}" @click="adicionarEndereco" icon="md-add"
+                                long
                                 type="dashed">Adicionar endereço
                         </Button>
                     </FormItem>
