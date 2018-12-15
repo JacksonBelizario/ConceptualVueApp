@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
@@ -14,6 +15,7 @@
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
     "bootstrap-nucleus": "^1.4.2",
+    "express": "^4.16.4",
     "iview": "^3.1.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
